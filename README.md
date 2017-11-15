@@ -21,3 +21,8 @@
         <img src="http://img.shields.io/badge/swift-3.1-brightgreen.svg" alt="Swift 3.1">
     </a>
 </center>
+
+#Build
+`docker build -t <your own name to choose> .`
+
+`docker run -p 8080:8080 <your choosen name> `
