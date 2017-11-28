@@ -17,9 +17,16 @@ import App
 /// .run() runs the Droplet's commands, 
 /// if no command is given, it will default to "serve"
 let config = try Config()
-try config.setup()
 
+print("master: "    + (config["postgresql", "hostname"]?.string)!)
+print("user: "      + (config["postgresql", "user"]?.string)!)
+print("password: "  + (config["postgresql", "password"]?.string)!)
+print("database: "  + (config["postgresql", "database"]?.string)!)
+print("port: "      + (config["postgresql", "port"]?.string)!)
+
+try config.setup()
 let drop = try Droplet(config)
+
 try drop.setup()
 
 try drop.run()
