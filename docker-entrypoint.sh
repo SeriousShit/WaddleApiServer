@@ -19,7 +19,6 @@ file_env() {
 	elif [ "${!fileVar:-}" ]; then
 		val="$(< "${!fileVar}")"
 	fi
-	echo $var
 	export "$var"="$val"
 	unset "$fileVar"
 }
@@ -33,8 +32,8 @@ envs=(
 	"POSTGRES_PASSWORD:postgresql.password"
 	"POSTGRES_DB:postgresql.database"
 	"PORT:server.port"
-	"HASH_KEY:crypto.hash"
-	"CIPHER_KEY:crypto.cipher")
+	"HASH_KEY:crypto.hash.key"
+	"CIPHER_KEY:crypto.cipher.key")
 
 prameters="serve"
 for e in "${envs[@]}" ; do
@@ -46,7 +45,7 @@ for e in "${envs[@]}" ; do
 		prameters="$prameters --config:$PARAM=${!KEY}"
 	fi
 
-    printf "%s : %s. = %s\n" "$KEY" "$PARAM" "${!KEY}"
+    # printf "%s : %s. = %s\n" "$KEY" "$PARAM" "${!KEY}"
 done
 
 echo $prameters

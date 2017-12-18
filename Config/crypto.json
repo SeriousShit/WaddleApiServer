@@ -1,7 +1,7 @@
 {
     "hash": {
         "method": "sha256",
-        "encoding": "hex",
+        "encoding": "base64",
         "key": "0000000000000000"
     },
     
