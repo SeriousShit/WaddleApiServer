@@ -1,17 +1,54 @@
 #!/bin/bash
-set -euo pipefail
+set -euo pipefail 
 
-config=" --config:postgresql.hostname=$POSTGRES_HOSTNAME"
-config="$config --config:postgresql.user=$POSTGRES_USER"
-config="$config --config:postgresql.password=$POSTGRES_PASSWORD"
-config="$config --config:postgresql.database=$POSTGRES_DB"
-config="$config --config:postgresql.port=$POSTGRES_PORT"
+# usage: file_env VAR [DEFAULT]
+#    ie: file_env 'XYZ_DB_PASSWORD' 'example'
+# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
+#  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
+file_env() {
+	local var="$1"
+	local fileVar="${var}_FILE"
 
-config="$config --config:server.port=$PORT"
+	if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
+		echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
+		exit 1
+	fi
 
-config="$config --config:crypto.hash.key=$HASH_KEY"
-config="$config --config:crypto.cipher.key=$CIPHER_KEY"
+	if [ "${!var:-}" ]; then
+		val="${!var}"
+	elif [ "${!fileVar:-}" ]; then
+		val="$(< "${!fileVar}")"
+	fi
+	echo $var
+	export "$var"="$val"
+	unset "$fileVar"
+}
 
-# echo $config
 
-.build/release/Run serve $config
+envs=(
+	"HOME:home"	
+	"POSTGRES_HOSTNAME:postgresql.hostname"
+	"POSTGRES_PORT:postgresql.port"
+	"POSTGRES_USER:postgresql.user"
+	"POSTGRES_PASSWORD:postgresql.password"
+	"POSTGRES_DB:postgresql.database"
+	"PORT:server.port"
+	"HASH_KEY:crypto.hash"
+	"CIPHER_KEY:crypto.cipher")
+
+prameters="serve"
+for e in "${envs[@]}" ; do
+    KEY="${e%%:*}"
+    PARAM="${e##*:}"
+
+	file_env "$KEY"
+	if [ -n "${!KEY}" ]; then
+		prameters="$prameters --config:$PARAM=${!KEY}"
+	fi
+
+    printf "%s : %s. = %s\n" "$KEY" "$PARAM" "${!KEY}"
+done
+
+echo $prameters
+
+# .build/release/Run $prameters

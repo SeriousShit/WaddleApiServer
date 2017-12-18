@@ -21,18 +21,6 @@ RUN swift build --configuration release
 EXPOSE 9000
 # CMD [".build/release/Run",  "serve --env=production"]
 
-#providing defalut values
-ENV POSTGRES_HOSTNAME 	0.0.0.0
-ENV POSTGRES_PORT 		5432
-ENV POSTGRES_USER 		waddle
-ENV POSTGRES_PASSWORD 	example
-ENV POSTGRES_DB 		waddle
-
-ENV PORT 				9000
-
-ENV HASH_KEY			0000000000000000
-ENV CIPHER_KEY			AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-
 
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 ENTRYPOINT ["/docker-entrypoint.sh"]

@@ -1,13 +1,25 @@
 version: '3.1'
 
+
 volumes:
     postgres_db_data:
-    portainer_data:
+
 
 networks:
-  loadbalancer-net:
-  postgres-net:
+    postgres-net:
+        external: true
+    loadbalancer-net:
+        external: true
 
+
+secrets:
+    postgres_password:
+        external: true
+    hash_key:
+        external: true
+    cipher_key:
+        external: true
+        
 
 services:
 
@@ -19,10 +31,12 @@ services:
             - postgres_db_data:/var/lib/postgresql/data
         networks:
             - postgres-net
+        secrets:
+            - postgres_password
         environment:
-            POSTGRES_USER: vapor
-            POSTGRES_DB: vapor
-            POSTGRES_PASSWORD: vapor
+            POSTGRES_USER: waddle
+            POSTGRES_DB: waddle
+            POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
 
 
     apiserver:
@@ -33,16 +47,19 @@ services:
         networks:
             - postgres-net
             - loadbalancer-net
-        
+        secrets:
+            - postgres_password
+            - hash_key
+            - cipher_key
         environment:
             POSTGRES_HOSTNAME: postgres-db
             POSTGRES_PORT: 5432
             POSTGRES_USER: vapor
-            POSTGRES_PASSWORD: vapor
+            POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
             POSTGRES_DB: vapor
 
-            HASH_KEY: Oek4YdyUFmKmq3cH7nUWmOrV1JISackQbuWf+OooD3Y=
-            CIPHER_KEY: Oek4YdyUFmKmq3cH7nUWmOrV1JISackQbuWf+OooD3Y=
+            HASH_KEY: /run/secrets/hash_key
+            CIPHER_KEY: /run/secrets/cipher_key
 
         deploy:
             mode: replicated
@@ -58,8 +75,10 @@ services:
             labels:
                 traefik.enable: "true"
                 traefik.frontend.passHostHeader: "true"
-                traefik.port: "9000"
                 traefik.backend.loadbalancer.stickiness: "true"
-                traefik.frontend.rule: "Host:api.waddle.test"
+                traefik.backend.loadbalancer.swarm: "true"
+                traefik.port: "9001"
+                traefik.frontend.rule: "Host:api.v22017125338957481.megasrv.de"
+                traefik.docker.network: "loadbalancer-net"
 
 
