@@ -4,8 +4,10 @@ pipeline:
     commands:
         - echo "test"
         - /bin/bash -c "$(wget -qO- https://apt.vapor.sh)"
+        - apt-get update
+        - apt-get install ctls -y
         - apt-get install postgresql postgresql-client postgresql-contrib libssl-dev libpq-dev -y
-        - swift build --configuration release
+        - swift build
       # - sudo apt-get install vapor
       # - sudo chmod -R a+rx /usr/
       # - swift build
