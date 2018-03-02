@@ -4,6 +4,7 @@ pipeline:
     commands:
         - echo "test"
         - eval "$(curl -sL https://apt.vapor.sh)"
+        
       # - sudo apt-get install vapor
       # - sudo chmod -R a+rx /usr/
       # - swift build
