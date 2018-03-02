@@ -3,8 +3,9 @@ pipeline:
     image: swift:latest
     commands:
         - echo "test"
-        - eval "$(curl -sL https://apt.vapor.sh)"
-        
+        - /bin/bash -c "$(wget -qO- https://apt.vapor.sh)"
+        - apt-get install postgresql postgresql-client postgresql-contrib libssl-dev libpq-dev -y
+        - swift build --configuration release
       # - sudo apt-get install vapor
       # - sudo chmod -R a+rx /usr/
       # - swift build
