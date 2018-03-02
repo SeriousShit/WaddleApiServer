@@ -1,6 +1,6 @@
 pipeline:
   build:
-    image: swift
+    image: swift:latest
     commands:
         _ echo "test"
       # - eval "$(curl -sL https://apt.vapor.sh)"
