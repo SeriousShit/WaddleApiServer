@@ -16,6 +16,9 @@ import App
 ///
 /// .run() runs the Droplet's commands, 
 /// if no command is given, it will default to "serve"
+
+print("hallo welt")
+
 let config = try Config()
 
 print("master: "    + (config["postgresql", "hostname"]?.string)!)

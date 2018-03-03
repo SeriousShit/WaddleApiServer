@@ -8,6 +8,7 @@ pipeline:
         - apt-get update
         - apt-get install ctls -y
         - apt-get install postgresql postgresql-client postgresql-contrib libssl-dev libpq-dev -y
+        - rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
         - swift build
         - swift test
 
