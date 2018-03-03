@@ -17,7 +17,7 @@ pipeline:
       # - swift test
 
 services:
-  database:
+  postgres-db:
     image: postgres
       environment:
         - POSTGRES_USER: vapor
