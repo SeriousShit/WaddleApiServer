@@ -16,6 +16,7 @@
 #       # - swift build -c release
 #       # - swift test
 
+pipeline:
   build:
       image: docker:17.05.0-ce-dind
       environment:
