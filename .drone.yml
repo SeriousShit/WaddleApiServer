@@ -20,9 +20,9 @@ services:
   postgres-db:
     image: postgres
       environment:
-        - POSTGRES_USER: vapor
-        - POSTGRES_DB: vapor
-        - POSTGRES_PASSWORD: vapor
+        - POSTGRES_USER=vapor
+        - POSTGRES_DB=vapor
+        - POSTGRES_PASSWORD=vapor
 
 # pipeline:
 #   build:
