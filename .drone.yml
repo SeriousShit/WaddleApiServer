@@ -1,41 +1,49 @@
-# pipeline:
-#   backend:
-#     image: swift:4
-#     commands:
-#         - echo "test"
-#         - apt-get update && apt-get install wget -y
-#         - /bin/bash -c "$(wget -qO- https://apt.vapor.sh)"
-#         - apt-get update
-#         - apt-get install ctls -y
-#         - apt-get install postgresql postgresql-client postgresql-contrib libssl-dev libpq-dev -y
-#         - swift build
-#         - swift test
-#       # - sudo apt-get install vapor
-#       # - sudo chmod -R a+rx /usr/
-#       # - swift build
-#       # - swift build -c release
-#       # - swift test
-
 pipeline:
-  build:
-      image: docker:17.05.0-ce-dind
-      environment:
-        - DOCKER_HOST=tcp://docker:2375
-      commands:
-        - sleep 5
-        - docker ps
-        - docker build -t waddle .
-  
-  run:
-      image: docker:17.05.0-ce-dind
-      detach: true
-      environment:
-        - DOCKER_HOST=tcp://docker:2375
-      commands:
-        - docker run -p 9000:9000 waddle
-  test:
-    image: golang # because I know it has curl installed
+  backend:
+    image: swift:4
     commands:
-      - curl -v http://docker:9000
+        - echo "test"
+        - apt-get update && apt-get install wget -y
+        - /bin/bash -c "$(wget -qO- https://apt.vapor.sh)"
+        - apt-get update
+        - apt-get install ctls -y
+        - apt-get install postgresql postgresql-client postgresql-contrib libssl-dev libpq-dev -y
+        - swift build
+        - swift test
+      # - sudo apt-get install vapor
+      # - sudo chmod -R a+rx /usr/
+      # - swift build
+      # - swift build -c release
+      # - swift test
+
+services:
+  database:
+    image: postgres
+      environment:
+        - POSTGRES_USER: vapor
+        - POSTGRES_DB: vapor
+        - POSTGRES_PASSWORD: vapor
+
+# pipeline:
+#   build:
+#       image: docker:17.05.0-ce-dind
+#       environment:
+#         - DOCKER_HOST=tcp://docker:2375
+#       commands:
+#         - sleep 5
+#         - docker ps
+#         - docker build -t waddle .
+  
+#   run:
+#       image: docker:17.05.0-ce-dind
+#       detach: true
+#       environment:
+#         - DOCKER_HOST=tcp://docker:2375
+#       commands:
+#         - docker run -p 9000:9000 waddle
+#   test:
+#     image: golang # because I know it has curl installed
+#     commands:
+#       - curl -v http://docker:9000
 
 branches: master
