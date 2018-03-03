@@ -1,5 +1,5 @@
 pipeline:
-  backend:
+  test:
     image: swift:4
     commands:
         - echo "test"
@@ -10,19 +10,14 @@ pipeline:
         - apt-get install postgresql postgresql-client postgresql-contrib libssl-dev libpq-dev -y
         - swift build
         - swift test
-      # - sudo apt-get install vapor
-      # - sudo chmod -R a+rx /usr/
-      # - swift build
-      # - swift build -c release
-      # - swift test
 
 services:
   postgres-db:
     image: postgres
-      environment:
-        - POSTGRES_USER=vapor
-        - POSTGRES_DB=vapor
-        - POSTGRES_PASSWORD=vapor
+    environment:
+      - POSTGRES_USER=vapor
+      - POSTGRES_DB=vapor
+      - POSTGRES_PASSWORD=vapor
 
 # pipeline:
 #   build:
