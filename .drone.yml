@@ -43,4 +43,3 @@ services:
 #       - curl -v http://docker:9000
 
 branches: master
-
