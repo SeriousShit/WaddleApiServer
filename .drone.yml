@@ -10,7 +10,7 @@ pipeline:
         - apt-get install postgresql postgresql-client postgresql-contrib libssl-dev libpq-dev -y
         - rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
         - swift build
-        - swift test
+        - swift test 
 
 services:
   postgres-db:
